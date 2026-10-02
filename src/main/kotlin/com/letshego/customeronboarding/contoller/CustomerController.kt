@@ -10,18 +10,18 @@ import org.springframework.web.bind.annotation.*
 @RequestMapping("/api/customers")
 class CustomerController(private val repository: CustomerRepository) {
 
-    // CREATE: Register new customer
+    // 1. CREATE: Register a new customer
     @PostMapping
     fun createCustomer(@RequestBody customer: Customer): ResponseEntity<Customer> {
         val savedCustomer = repository.save(customer)
         return ResponseEntity(savedCustomer, HttpStatus.CREATED)
     }
 
-    // READ ALL: Get list of all customers
+    // 2. READ ALL: Fetch all customers
     @GetMapping
     fun getAllCustomers(): List<Customer> = repository.findAll()
 
-    // READ ONE: Get customer by ID
+    // 3. READ ONE: Fetch a single customer by ID
     @GetMapping("/{id}")
     fun getCustomerById(@PathVariable id: Long): ResponseEntity<Customer> {
         return repository.findById(id)
@@ -29,22 +29,22 @@ class CustomerController(private val repository: CustomerRepository) {
             .orElse(ResponseEntity.notFound().build())
     }
 
-    // UPDATE: Update customer details by ID
+    // 4. UPDATE: Modify an existing customer record
     @PutMapping("/{id}")
     fun updateCustomer(
         @PathVariable id: Long,
-        @RequestBody updatedDetails: Customer
+        @RequestBody details: Customer
     ): ResponseEntity<Customer> {
         return repository.findById(id).map { existingCustomer ->
-            existingCustomer.name = updatedDetails.name
-            existingCustomer.age = updatedDetails.age
-            existingCustomer.religion = updatedDetails.religion
-            existingCustomer.nationalId = updatedDetails.nationalId
+            existingCustomer.name = details.name
+            existingCustomer.age = details.age
+            existingCustomer.religion = details.religion
+            existingCustomer.nationalId = details.nationalId
             ResponseEntity.ok(repository.save(existingCustomer))
         }.orElse(ResponseEntity.notFound().build())
     }
 
-    // DELETE: Remove customer record by ID
+    // 5. DELETE: Remove a customer record by ID
     @DeleteMapping("/{id}")
     fun deleteCustomer(@PathVariable id: Long): ResponseEntity<Void> {
         return if (repository.existsById(id)) {
