@@ -1,4 +1,4 @@
-package com.letshego.customeronboarding.model
+package com.letshego.customeronboarding.entity
 
 import jakarta.persistence.Entity
 import jakarta.persistence.GeneratedValue
@@ -12,7 +12,6 @@ data class Customer(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long? = null,
-
     var name: String,
     var age: Int,
     var religion: String,
